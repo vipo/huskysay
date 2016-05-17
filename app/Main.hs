@@ -11,7 +11,6 @@ main :: IO ()
 main = do
   args <- getArgs
   (font, text) <- parseArgs args
-  --putStrLn $ show font
   putStrLn $ render text font
 
 parseArgs :: [String] -> IO (Font, String)
