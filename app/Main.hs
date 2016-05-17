@@ -10,7 +10,8 @@ main :: IO ()
 main = do
   args <- getArgs
   (font, text) <- parseArgs args
-  mapM_ putStrLn $ render text font
+  --putStrLn $ show font
+  putStrLn $ render text font
 
 parseArgs :: [String] -> IO (Font, String)
 parseArgs (text:[]) = return (defaultFont, text)

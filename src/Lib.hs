@@ -6,14 +6,23 @@ import Defaults
 
 import Numeric
 import Data.Char
-import qualified Data.Map.Strict as M
 import qualified Data.Bits as B
 
 -- | Renders a given text as ascii art
-render :: String   -- ^ String to render
-       -> Font     -- ^ Font to use       
-       -> [String] -- ^ Lines of rendered text 
-render txt font = [txt]
+render :: String -- ^ String to render
+       -> Font   -- ^ Font to use       
+       -> String -- ^ Lines of rendered text 
+render txt font = concatSegments ((map findChar txt) ++ [newlines]) ""
+  where
+    findChar :: Char -> CharData
+    findChar c = case lookup c (mapping font) of
+      Nothing -> error $ "No data for char: " ++ [c]
+      Just m -> m
+    newlines :: CharData
+    newlines = replicate (size font) "\n"
+    concatSegments :: [CharData] -> String -> String
+    concatSegments ((s:ss):ls) acc = concatSegments (ls ++ [ss]) (acc ++ s)
+    concatSegments _ acc = acc
 
 parseFont :: String -- ^ Font file content
           -> Font   -- ^ Parsed font
@@ -23,10 +32,7 @@ parseFont content =
     (size, charsInfo) = lookupSize ls
     chars = lookupChars charsInfo size []
   in 
-    Font {
-        size = size
-      , mapping = M.fromList (filter (\(c, _) -> isPrint c && isAscii c) chars)
-    }
+    Font size $ filter (\(c, _) -> isPrint c && isAscii c) chars
 
 lookupChars :: [String]           -- ^ font file lines
             -> Int                -- ^ font size
@@ -35,18 +41,21 @@ lookupChars :: [String]           -- ^ font file lines
 lookupChars [] _ acc = acc
 lookupChars ls size acc =
   let
-    lookupEncoding [] = error "Cannot find encoding"
+    lookupEncoding [] = Nothing
     lookupEncoding (l:ls) = case l of
-      ('E':'N':'C':'O':'D':'I':'N':'G':' ':r) -> read r
+      ('E':'N':'C':'O':'D':'I':'N':'G':' ':r) -> Just (read r, ls)
       _ -> lookupEncoding ls
     readBitmap [] = error "Bitmap error"
     readBitmap (l:ls) = case l of
       ('B':'I':'T':'M':'A':'P':_) -> (map (renderFromHex size) (take size ls), drop size ls)
       _ -> readBitmap ls
-    (code, bitmap) = lookupEncoding ls
-    (bits, left) = readBitmap bitmap
   in
-    lookupChars left size ((chr code, bits):acc)
+    case lookupEncoding ls of
+      Nothing -> acc
+      Just (code, bitmap) ->
+        lookupChars left size ((chr code, bits):acc)
+        where
+          (bits, left) = readBitmap bitmap
 
 renderFromHex :: Int    -- ^ width
               -> String -- ^ hex representation
