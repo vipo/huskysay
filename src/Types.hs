@@ -1,9 +1,7 @@
 module Types
 where
 
-type CharData = [String]
-
 data Font = Font {
     size :: Int
-  , mapping :: [(Char, CharData)]
+  , mapping :: [(Char, [String])]
 } deriving Show

@@ -5,6 +5,7 @@ import System.Environment
 import Types
 import Defaults
 import Lib
+import Parser
 
 main :: IO ()
 main = do
@@ -17,6 +18,6 @@ parseArgs :: [String] -> IO (Font, String)
 parseArgs (text:[]) = return (defaultFont, text)
 parseArgs (font:text:[]) = do
   content <- readFile font 
-  return (parseFont content, text)
+  return (parseBdfFont content, text)
 parseArgs _ = error $ concat ["Invalid parameters. ",
   "Valid parameters are: [font file] text_to_render"]
