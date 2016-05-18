@@ -1,7 +1,7 @@
-module Types
-where
+module Types where
 
-data Font = Font {
-    size :: Int
-  , mapping :: [(Char, [String])]
-} deriving Show
+data Font =
+  Font {size :: Int
+       ,filler :: Char
+       ,mapping :: [(Char,[Integer])]}
+  deriving ((((Show))))

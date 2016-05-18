@@ -1,5 +1,6 @@
-module Lib
-where
+module Lib where
+
+import qualified Data.Bits as B
 
 import Types
 import Defaults
@@ -8,11 +9,15 @@ import Defaults
 render :: String -- ^ String to render
        -> Font   -- ^ Font to use       
        -> String -- ^ Lines of rendered text 
-render txt font = concatSegments ((map findChar txt) ++ [newlines]) ""
-  where
-    findChar c = case lookup c (mapping font) of
-      Nothing -> error $ "No data for char: " ++ [c]
-      Just m -> m
-    newlines = replicate (size font) "\n"
-    concatSegments ((s:ss):ls) acc = concatSegments (ls ++ [ss]) (acc ++ s)
-    concatSegments _ acc = acc
+render txt font = 
+  concatSegments (map findChar txt) ""
+  where findChar c = 
+          case lookup c (mapping font) of
+            Nothing -> error $ "No data for char: " ++ [c]
+            Just m -> m
+        newlines = replicate (size font) "\n"
+        integerToSegment i = map (\p -> if B.testBit i p then (filler font) else ' ') $ reverse [0 .. size font -1]
+        concatSegments ((s:ss):ls) acc = 
+          concatSegments (ls ++ [ss])
+                         (acc ++ integerToSegment s)
+        concatSegments _ acc = acc
