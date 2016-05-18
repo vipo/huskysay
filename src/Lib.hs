@@ -8,10 +8,11 @@ import qualified Data.List as L
 -- | Renders a given text as ascii art
 render :: String   -- ^ String to render
        -> Font     -- ^ Font to use
-       -> [String] -- ^ Lines of rendered text
+       -> String   -- ^ Rendered text
 render txt font = 
-  map (\l -> 
-         map pointToChar (concat l))
+  L.concat $
+  L.intersperse "\n" $
+  map (\l -> map pointToChar (concat l))
       (L.transpose (map findChar txt))
   where findChar c = 
           case lookup c (mapping font) of
