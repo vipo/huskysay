@@ -10,14 +10,15 @@ main :: IO ()
 main = 
   do args <- getArgs
      (font,text) <- parseArgs args
-     putStrLn $ show font
-     putStrLn $ render text font
+     mapM_ putStrLn $ render text font
 
 parseArgs :: [String] -> IO (Font,String)
 parseArgs (text:[]) = return (defaultFont,text)
 parseArgs (font:filler:text:[]) = 
   do content <- readFile font
-     return (parseBdfFont content (head filler),text)
+     return (parseBdfFont content
+                          (head filler)
+            ,text)
 parseArgs _ = 
   error $
   concat ["Invalid parameters. "
