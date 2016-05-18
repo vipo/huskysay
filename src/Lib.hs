@@ -2,7 +2,6 @@ module Lib where
 
 import Types
 import Defaults
-import qualified Data.List.Split as S
 import qualified Data.List as L
 
 -- | Renders a given text as ascii art
