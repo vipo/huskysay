@@ -6,9 +6,9 @@ import           Lib
 import           Types
 
 main :: IO ()
-main = hspec $ do
+main = hspec $
   describe "default font" $ do
-    it "renders space correctly" $ do
+    it "renders space correctly" $
       render " " defaultFont `shouldBe` concat [
         "            \n",
         "            \n",
@@ -24,7 +24,7 @@ main = hspec $ do
         "            "
         ]
 
-    it "renders single letter correctly" $ do
+    it "renders single letter correctly" $
       render "A" defaultFont `shouldBe` concat [
         "            \n",
         "            \n",
@@ -40,7 +40,7 @@ main = hspec $ do
         "            "
         ]
 
-    it "renders a few letters correctly" $ do
+    it "renders a few letters correctly" $
       render "Ab" defaultFont `shouldBe` concat [
         "                        \n",
         "                        \n",
@@ -56,7 +56,7 @@ main = hspec $ do
         "                        "
         ]
 
-    it "has ability to change a filler" $ do
+    it "has ability to change a filler" $
       render "Ab" (defaultFont {filler='*'}) `shouldBe` concat [
         "                        \n",
         "                        \n",
