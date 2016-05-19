@@ -1,9 +1,9 @@
 
-import Test.Hspec
+import           Test.Hspec
 
-import Lib
-import Defaults
-import Types
+import           Defaults
+import           Lib
+import           Types
 
 main :: IO ()
 main = hspec $ do
