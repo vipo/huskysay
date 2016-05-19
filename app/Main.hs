@@ -16,9 +16,7 @@ parseArgs :: [String] -> IO (Font,String)
 parseArgs [text] = return (defaultFont,text)
 parseArgs [font, filler, text] =
   do content <- readFile font
-     return (parseBdfFont content
-                          (head filler)
-            ,text)
+     return (parseBdfFont content (head filler),text)
 parseArgs _ =
   error ("Invalid parameters. " ++
      "Valid parameters are: [font_file filler_char] text_to_render")
