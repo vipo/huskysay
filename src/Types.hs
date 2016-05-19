@@ -7,7 +7,7 @@ type GlyphRow = [Point]
 type Glyph = [GlyphRow]
 
 data Font =
-  Font {size :: Int
-       ,filler :: Char
+  Font {size    :: Int
+       ,filler  :: Char
        ,mapping :: [(Char,Glyph)]}
   deriving (Show)

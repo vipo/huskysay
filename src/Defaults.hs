@@ -1,12 +1,12 @@
 module Defaults where
 
-import Types
+import           Types
 
 defaultFont :: Font
-defaultFont = 
+defaultFont =
   Font {size = 12
        ,filler = '@'
-       ,mapping = 
+       ,mapping =
           [('~'
            ,[[W,W,W,W,W,W,W,W,W,W,W,W]
             ,[W,W,W,W,W,B,W,W,B,W,W,W]
